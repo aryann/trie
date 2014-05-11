@@ -13,6 +13,12 @@ class _Node(object):
 
 
 class Trie(object):
+    """"A data structure that can store a set of "dense" strings while
+    using memory judiciously.
+
+    A dense set of strings is defined as a set in which many strings
+    share the same prefix (e.g., all words in a dictionary).
+    """
 
     def __init__(self, initial_data=None):
         self.root = _Node()
@@ -20,6 +26,7 @@ class Trie(object):
             self.Add(word)
 
     def Add(self, value):
+        """Adds an element to the set."""
         if not isinstance(value, basestring):
             raise TypeError(
                 'only strings can be placed in the trie; received: {0}'
@@ -37,7 +44,8 @@ class Trie(object):
         current.is_member = True
 
     def GetMembers(self):
-
+        """Returns a list containing all elements in the trie. The list
+        elements are presented in sorted order."""
         def GetMembers(current):
             for letter, child in sorted(current.children.iteritems()):
                 if child.is_member:
@@ -52,6 +60,7 @@ class Trie(object):
         return members
 
     def __contains__(self, value):
+        """Returns True if the given value is in the trie."""
         current = self.root
         for char in value:
             child = current.children.get(char)
@@ -62,7 +71,12 @@ class Trie(object):
 
         return current.is_member
 
+    def __nonzero__(self):
+        """Returns True if at least one element is in the trie."""
+        return self.root.is_member or bool(self.root.children)
+
     def __repr__(self):
+        """Returns a representation of the state of the trie."""
         return 'Trie([{0}])'.format(repr(self.GetMembers()))
 
 
@@ -80,3 +94,5 @@ if __name__ == '__main__':
     assert 'hello world' not in t
     assert '' in t
     assert 'hel' not in t
+    assert t
+    assert not Trie()
