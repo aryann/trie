@@ -61,6 +61,9 @@ class Trie(object):
 
     def __contains__(self, value):
         """Returns True if the given value is in the trie."""
+        if not isinstance(value, basestring):
+            return False
+
         current = self.root
         for char in value:
             child = current.children.get(char)
@@ -94,5 +97,6 @@ if __name__ == '__main__':
     assert 'hello world' not in t
     assert '' in t
     assert 'hel' not in t
+    assert 1 not in t
     assert t
     assert not Trie()
